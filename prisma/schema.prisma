@@ -1,0 +1,56 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model Store {
+  id              String   @id @default(cuid())
+  shop            String   @unique
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+  whatsappNumber  String   @default("")
+  agentName       String   @default("Support")
+  preMessage      String   @default("Hi! I have a question 👋")
+  buttonColor     String   @default("#25D366")
+  position        String   @default("right")
+  autoOpen        Boolean  @default(false)
+  autoOpenDelay   Int      @default(5)
+  hideOnCheckout  Boolean  @default(true)
+  mobileOnly      Boolean  @default(false)
+  addProductName  Boolean  @default(true)
+  showOfflineHours Boolean @default(true)
+  plan            String   @default("starter")
+  planStatus      String   @default("active")
+  analytics       Analytics[]
+  payments        Payment[]
+}
+
+model Analytics {
+  id        String   @id @default(cuid())
+  storeId   String
+  date      DateTime @db.Date
+  clicks    Int      @default(0)
+  chats     Int      @default(0)
+  pageViews Int      @default(0)
+  store     Store    @relation(fields: [storeId], references: [id], onDelete: Cascade)
+
+  @@unique([storeId, date])
+  @@index([storeId])
+}
+
+model Payment {
+  id              String   @id @default(cuid())
+  storeId         String
+  amount          Int
+  currency        String   @default("INR")
+  status          String
+  gateway         String
+  gatewayPaymentId String?
+  plan            String
+  createdAt       DateTime @default(now())
+  store           Store    @relation(fields: [storeId], references: [id], onDelete: Cascade)
+}

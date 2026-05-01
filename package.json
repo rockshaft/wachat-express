@@ -1,0 +1,15 @@
+{
+  "name": "wachat-express",
+  "version": "1.0.0",
+  "description": "WhatsApp Chat Widget for Shopify",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "dev": "node server.js"
+  },
+  "dependencies": {
+    "express": "^4.18.2",
+    "@prisma/client": "^5.7.0",
+    "prisma": "^5.7.0"
+  }
+}
